@@ -30,14 +30,23 @@ func setupAdapters() (echo.HandlerFunc, error) {
 	taskRepository := NewTaskRepository(db)
 
 	createTaskFunc := NewTaskHTTPHandler(
-		NewCreateTaskFunc(taskRepository.CreateTask(),
-			func(ctx context.Context, id int) error {
-				fmt.Printf("Task with ID %d was saved", id)
-
-				return nil
-			},
+		NewCreateTaskFunc(
+			taskRepository.CreateTask(),
+			NewPrintNotifyAboutTaskSaveOrUpdatedFunc(),
 		),
 	)
 
 	return createTaskFunc, nil
+}
+
+// NewPrintNotifyAboutTaskSaveOrUpdatedFunc is a concrete implementation of NotifyAboutTaskSaveOrUpdatedFunc
+// that prints a message to the console when the task is saved
+// it represents a secondary adapter on the right side of the hexagon since is triggered by the business logic
+func NewPrintNotifyAboutTaskSaveOrUpdatedFunc() NotifyAboutTaskSaveOrUpdatedFunc {
+	return NewNotifyAboutTaskSaveOrUpdatedFunc(
+		func(ctx context.Context, id int) error {
+			fmt.Printf("Task with ID %d was saved", id)
+
+			return nil
+		})
 }

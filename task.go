@@ -61,3 +61,10 @@ func NewCreateTaskFunc(save SaveTaskFunc, notify NotifyAboutTaskSaveOrUpdatedFun
 		return task, nil
 	}
 }
+
+// NewNotifyAboutTaskSaveOrUpdatedFunc creates a new NotifyAboutTaskSaveOrUpdatedFunc
+// every adapter will call this function to create a new NotifyAboutTaskSaveOrUpdatedFunc
+// independent of the concrete technology used to notify about the task
+func NewNotifyAboutTaskSaveOrUpdatedFunc(toCall func(ctx context.Context, id int) error) NotifyAboutTaskSaveOrUpdatedFunc {
+	return toCall
+}
