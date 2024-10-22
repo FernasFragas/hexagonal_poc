@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"github.com/labstack/echo/v4"
 )
 
@@ -12,9 +14,7 @@ func main() {
 		e.Logger.Error(err.Error())
 	}
 
-	e.POST("/", func(c echo.Context) error {
-		return handler(c)
-	})
+	e.POST("/add", handler)
 
 	if err := e.Start(":8080"); err != nil {
 		e.Logger.Fatal(err.Error())
@@ -31,8 +31,13 @@ func setupAdapters() (echo.HandlerFunc, error) {
 
 	createTaskFunc := NewTaskHTTPHandler(
 		NewCreateTaskFunc(taskRepository.CreateTask(),
-			nil,
-		))
+			func(ctx context.Context, id int) error {
+				fmt.Printf("Task with ID %d was saved", id)
+
+				return nil
+			},
+		),
+	)
 
 	return createTaskFunc, nil
 }
