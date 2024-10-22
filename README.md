@@ -8,6 +8,6 @@ Is a simple task manager that allows you to create a new task and store it in a 
 
 Read the comments in the code to understand who's the primary and secondary ports.
 
-![Screenshot](./screenshot.png)
+![Screenshot](https://github.com/FernasFragas/hexagonal_poc/blob/main/Screenshot.png?raw=true)
 
 For a more detailed explanation you can read this [article](https://medium.com/@patronfragas/hexagonal-architecture-walk-the-talk-a1c036de6f8d).
