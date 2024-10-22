@@ -1,4 +1,5 @@
 // Represents the driven adapter of the task repository.
+// it represents a secondary adapter on the right side of the hexagon
 package main
 
 import (
@@ -36,6 +37,8 @@ func NewTaskRepository(db *sql.DB) *TaskRepository {
 	return &TaskRepository{db: db}
 }
 
+// CreateTask is a function that saves a task in the database
+// it is a concrete driven adapter since is triggered and used by the business logic
 func (t *TaskRepository) CreateTask() SaveTaskFunc {
 	return func(ctx context.Context, task Task) error {
 		_, err := t.db.Exec("INSERT INTO tasks (id, title, description, status) VALUES (?, ?, ?, ?)", task.ID, task.Title, task.Description, task.Status)
