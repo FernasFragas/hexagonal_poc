@@ -38,7 +38,8 @@ func NewTaskRepository(db *sql.DB) *TaskRepository {
 }
 
 // CreateTask is a function that saves a task in the database
-// it is a concrete driven adapter since is triggered and used by the business logic
+// it is a concrete implementation of saving a task of the application
+// And is a driven adapter since is triggered and used by the business logic
 func (t *TaskRepository) CreateTask() SaveTaskFunc {
 	return func(ctx context.Context, task Task) error {
 		_, err := t.db.Exec("INSERT INTO tasks (id, title, description, status) VALUES (?, ?, ?, ?)", task.ID, task.Title, task.Description, task.Status)
