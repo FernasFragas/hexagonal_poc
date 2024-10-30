@@ -1,6 +1,7 @@
+package main
+
 // HTTP driving adapter for task creation
 // It represents a primary adapter on the left side of the hexagon
-package main
 
 import "github.com/labstack/echo/v4"
 

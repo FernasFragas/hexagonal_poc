@@ -1,13 +1,15 @@
+package main
+
 // This is the inside of the hexagon, where the business logic is implemented.
 // This code is decoupled from any Primary(Driving) and Secondary(Driven) Adapters
 // specific implementations.
-package main
 
 import (
 	"context"
 	"time"
 )
 
+// Task represents a task in the system
 type Task struct {
 	ID          int
 	Title       string
@@ -15,6 +17,7 @@ type Task struct {
 	Status      TaskStatus
 }
 
+// TaskStatus represents the status of a task
 type TaskStatus string
 
 const (
@@ -22,6 +25,7 @@ const (
 	UNDONE TaskStatus = "UNDONE"
 )
 
+// TaskToCreate represents the data needed to create a task
 type TaskToCreate struct {
 	Title       string
 	Description string
@@ -33,13 +37,13 @@ type CreateTaskFunc func(ctx context.Context, task TaskToCreate) (Task, error)
 // SaveTaskFunc represents the business process of saving a task
 type SaveTaskFunc func(ctx context.Context, task Task) error
 
-// NotifyAboutTaskSaveOrUpdatedFunc represents the business process of generate a notification
-type NotifyAboutTaskSaveOrUpdatedFunc func(ctx context.Context, id int) error
+// NotifyAboutTaskChangeFunc represents the business process of generate a notification
+type NotifyAboutTaskChangeFunc func(ctx context.Context, id int) error
 
 // NewCreateTaskFunc creates a new CreateTaskFunc that saves a task and notifies about it
 // every adapter will call this function to create a new CreateTaskFunc
 // independent of the concrete technology used to save the task and notify about it
-func NewCreateTaskFunc(save SaveTaskFunc, notify NotifyAboutTaskSaveOrUpdatedFunc) CreateTaskFunc {
+func NewCreateTaskFunc(save SaveTaskFunc, notify NotifyAboutTaskChangeFunc) CreateTaskFunc {
 	return func(ctx context.Context, taskToSave TaskToCreate) (Task, error) {
 		task := Task{
 			ID:          time.Now().Nanosecond(),
@@ -60,11 +64,4 @@ func NewCreateTaskFunc(save SaveTaskFunc, notify NotifyAboutTaskSaveOrUpdatedFun
 
 		return task, nil
 	}
-}
-
-// NewNotifyAboutTaskSaveOrUpdatedFunc creates a new NotifyAboutTaskSaveOrUpdatedFunc
-// every adapter will call this function to create a new NotifyAboutTaskSaveOrUpdatedFunc
-// independent of the concrete technology used to notify about the task
-func NewNotifyAboutTaskSaveOrUpdatedFunc(toCall func(ctx context.Context, id int) error) NotifyAboutTaskSaveOrUpdatedFunc {
-	return toCall
 }

@@ -11,3 +11,10 @@ Read the comments in the code to understand who's the primary and secondary port
 ![Screenshot](https://github.com/FernasFragas/hexagonal_poc/blob/main/Screenshot.png?raw=true)
 
 For a more detailed explanation you can read this [article](https://medium.com/@patronfragas/hexagonal-architecture-walk-the-talk-a1c036de6f8d).
+
+## How to run
+```bash
+go run .
+
+curl --verbose http://localhost:8080/add -d '{"name": "task1", "description": "description1"}' -H "Content-Type: application/json"
+```

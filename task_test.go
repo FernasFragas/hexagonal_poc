@@ -26,7 +26,7 @@ func TestNewTaskHTTPHandler(t *testing.T) {
 		taskRepository := NewTaskRepository(db)
 
 		if assert.NoError(t, NewTaskHTTPHandler(NewCreateTaskFunc(
-			taskRepository.CreateTask(),
+			taskRepository.CreateTask,
 			func(ctx context.Context, id int) error {
 				fmt.Printf("Task with ID %d was saved", id)
 

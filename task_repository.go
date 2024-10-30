@@ -1,6 +1,7 @@
+package main
+
 // Represents the driven adapter of the task repository.
 // it represents a secondary adapter on the right side of the hexagon
-package main
 
 import (
 	"context"
@@ -8,6 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// InitDB is a function that initializes the database
 func InitDB() (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", "./tasks.db")
 	if err != nil {
@@ -29,10 +31,12 @@ func InitDB() (*sql.DB, error) {
 	return db, nil
 }
 
+// TaskRepository is a struct that represents the repository of tasks
 type TaskRepository struct {
 	db *sql.DB
 }
 
+// NewTaskRepository is a function that creates a new task repository
 func NewTaskRepository(db *sql.DB) *TaskRepository {
 	return &TaskRepository{db: db}
 }
@@ -40,13 +44,11 @@ func NewTaskRepository(db *sql.DB) *TaskRepository {
 // CreateTask is a function that saves a task in the database
 // it is a concrete implementation of saving a task of the application
 // And is a driven adapter since is triggered and used by the business logic
-func (t *TaskRepository) CreateTask() SaveTaskFunc {
-	return func(ctx context.Context, task Task) error {
-		_, err := t.db.Exec("INSERT INTO tasks (id, title, description, status) VALUES (?, ?, ?, ?)", task.ID, task.Title, task.Description, task.Status)
-		if err != nil {
-			return err
-		}
-
-		return nil
+func (t *TaskRepository) CreateTask(_ context.Context, task Task) error {
+	_, err := t.db.Exec("INSERT INTO tasks (id, title, description, status) VALUES (?, ?, ?, ?)", task.ID, task.Title, task.Description, task.Status)
+	if err != nil {
+		return err
 	}
+
+	return nil
 }
