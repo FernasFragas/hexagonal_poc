@@ -29,3 +29,7 @@ go.work.sum
 
 # macOS
 .DS_Store
+
+# sqlite & db
+.db
+.db.sqlite
